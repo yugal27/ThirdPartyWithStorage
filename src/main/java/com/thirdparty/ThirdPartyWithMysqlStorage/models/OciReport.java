@@ -1,6 +1,5 @@
 package com.thirdparty.ThirdPartyWithMysqlStorage.models;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -20,16 +19,10 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.thirdparty.ThirdPartyWithMysqlStorage.utils.ReportCustomDeserializer;
 import com.thirdparty.ThirdPartyWithMysqlStorage.utils.ReportCustomSerializer;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 
 @Entity
@@ -38,9 +31,9 @@ import lombok.ToString;
 @JsonIgnoreProperties(value = {"id", "updatedAt"}, 
 allowGetters = true)
 @Component
-@Getter
-@Setter
-@ToString
+//@Getter
+//@Setter
+//@ToString
 public class OciReport implements Serializable {
 	/**
 	 * 
@@ -76,26 +69,16 @@ public class OciReport implements Serializable {
 	@UpdateTimestamp
     private LocalDateTime updatedAt;
 	
-	/*@Override
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\nreportId:"+reportId);
 		sb.append("\nactor:"+actor);
 		sb.append("\nreport:"+report.toString());
+		if(reportPubId!=null)
+			sb.append("\nreportPubId:"+reportPubId.toString());			
 		return sb.toString();
-	}*/
-	
-	public static void main(String[] args) throws IOException {
-		OciReport ocir = new OciReport();
-		ocir.setActor("yugal");
-		ocir.setId(12345678L);
-		ocir.setReportId("12345678");
-		ocir.setReport("xml".getBytes());
-		ocir.setReportPubId("yml".getBytes());
-		System.out.println(ocir);
-		ObjectMapper mp = new ObjectMapper();
-		System.out.println(mp.writeValueAsString(ocir));
-		String xml = "{\"id\":12345678,\"updatedAt\":null,\"reportId\":\"12345678\",\"actor\":\"yugal\",\"report\":\"xml\",\"reportPubId\":\"yml\"}"; 
-		System.out.println(mp.readValue(xml, OciReport.class));
 	}
+	
+	
 }
