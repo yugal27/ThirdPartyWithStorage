@@ -42,43 +42,43 @@ public class OciReport implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-	
-    @NotBlank
-    @JsonProperty("reportId")
-	private String reportId;
-    
-    @NotBlank
-    @JsonProperty("actor")
-    private String actor;
     
     @Lob
     @Column(length=100000)
-    @JsonProperty("report")
-    @JsonSerialize(using = ReportCustomSerializer.class)
-    @JsonDeserialize(using = ReportCustomDeserializer.class)
     private byte[] report;
 	
-    @Lob
-    @Column(length=100000)
-    @JsonProperty("reportPubId")
-    @JsonSerialize(using = ReportCustomSerializer.class)
-    @JsonDeserialize(using = ReportCustomDeserializer.class)
-    private byte[] reportPubId;
-    
 	@Column(nullable = false)
 	@UpdateTimestamp
     private LocalDateTime updatedAt;
 	
+	public Long getId() {
+		return id;
+	}
+
+	public byte[] getReport() {
+		return report;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setReport(byte[] report) {
+		this.report = report;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\nreportId:"+reportId);
-		sb.append("\nactor:"+actor);
 		sb.append("\nreport:"+report.toString());
-		if(reportPubId!=null)
-			sb.append("\nreportPubId:"+reportPubId.toString());			
 		return sb.toString();
 	}
-	
-	
 }

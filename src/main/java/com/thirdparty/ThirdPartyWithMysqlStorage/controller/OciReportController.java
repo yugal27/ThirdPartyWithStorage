@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,16 +30,21 @@ public class OciReportController {
 	@Autowired
 	OcirRepository ocirRepository;
 	
+	@Autowired
+	private ApplicationContext appContext;
+	
 	@GetMapping("/ping")
 	String ping() {
 	    return "Keep-Alive";
 	}
 	
 	@PutMapping("/report/{id}")
-	void storeReport(@RequestBody OciReport report, @PathVariable String id) {
+	void storeReport(@RequestBody String report, @PathVariable String id) {
 		HTTP_LOGGER.info(report.toString());
-		ocirRepository.save(report);
-		executorService.submit(new ReportDumpWorker(ocirRepository,report)); 
+		OciReport ocir = appContext.getBean(OciReport.class);
+		ocir.setReport(report.getBytes());
+		ocirRepository.save(ocir);
+		executorService.submit(new ReportDumpWorker(ocirRepository,ocir)); 
 			
 	}
 }
